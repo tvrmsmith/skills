@@ -40,6 +40,8 @@ A LONG, numbered list of user stories. Each user story should be in the format o
 
 This list of user stories should be extremely extensive and cover all aspects of the feature.
 
+Restrict stories to end-user observable value. Non-functional requirements — security, idempotency, tenancy, typed-model invariants, "as a developer" constraints — belong in Implementation Decisions or as acceptance criteria on a functional story, not here. If the actor is the team rather than a user, it is not a user story.
+
 ## Implementation Decisions
 
 A list of implementation decisions that were made. This can include:
