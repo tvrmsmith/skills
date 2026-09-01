@@ -52,6 +52,7 @@ Ask the user:
 - Does the granularity feel right? (too coarse / too fine)
 - Are the blocking edges correct: does each ticket only depend on tickets that genuinely gate it?
 - Should any tickets be merged or split further?
+- Is every behavioural criterion executable as written: does each `Then` name an outcome someone could observe?
 
 Iterate until the user approves the breakdown.
 
@@ -76,6 +77,9 @@ Do NOT close or modify any parent issue.
 
 **Status:** ready-for-agent
 
+**Acceptance criteria:** behavioural ones as Gherkin, the rest as a checkbox list. Same rules as the
+issue template below.
+
 - [ ] Acceptance criterion 1
 - [ ] Acceptance criterion 2
 
@@ -92,6 +96,28 @@ A reference to the parent issue on the tracker (if the source was an existing is
 The end-to-end behaviour this ticket makes work, from the user's perspective, not layer-by-layer implementation.
 
 ## Acceptance criteria
+
+Behavioural criteria as Gherkin, phrased in the domain language a user would recognise: an actor, an
+action, an observable outcome. A slice spans services, so a criterion is slice-wide and stays
+free of any mechanism a later seam decision could invalidate.
+
+```gherkin
+Scenario: transfer is rejected when it would breach the minimum balance
+  Given a customer with a balance of £50 and a minimum balance of £20
+  When the customer transfers £40 to savings
+  Then the transfer is rejected
+  And the balance is unchanged
+```
+
+`When the customer transfers £40 to savings` survives the seam moving. `When POST /v1/transfers
+returns 402` does not.
+
+These are **specification, never a test file**. Nothing here runs as written, since no single
+service observes a whole slice: implementation realises each criterion at the seams it confirms.
+
+Everything else stays a checkbox list. Non-functional criteria (security, idempotency, tenancy,
+typed-model invariants) belong there: Given/When/Then forced onto them produces tests that pass by
+construction.
 
 - [ ] Criterion 1
 - [ ] Criterion 2
