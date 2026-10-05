@@ -1,0 +1,5 @@
+interface:
+  display_name: "To Spec To Tickets"
+  short_description: "Write a spec, review it, then split it into tickets"
+policy:
+  allow_implicit_invocation: false
