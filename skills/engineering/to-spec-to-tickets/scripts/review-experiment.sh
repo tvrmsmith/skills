@@ -12,6 +12,7 @@
 #   review-experiment.sh escaped spec=<id> reviewer=<name>
 #   review-experiment.sh summary
 #
+# Requires jq for every subcommand except pick.
 # Log file: $SPEC_REVIEW_EXPERIMENT_LOG, default ~/.claude/spec-review-experiment.jsonl
 set -euo pipefail
 
@@ -24,6 +25,8 @@ OPTIONAL_LOG="tokens tool_uses duration_ms paraphrase_corrections"
 REQUIRED_RESOLVE="spec reviewer kept unique_kept skipped"
 
 die() { echo "review-experiment: $*" >&2; exit 1; }
+
+need_jq() { command -v jq >/dev/null 2>&1 || die "jq is required (install it, e.g. brew install jq)"; }
 
 in_list() { # in_list <word> <list>
   case " $2 " in *" $1 "*) return 0 ;; *) return 1 ;; esac
@@ -69,6 +72,7 @@ append() {
 }
 
 cmd="${1:-}"; [ $# -gt 0 ] && shift
+case "$cmd" in log|resolve|escaped|summary) need_jq ;; esac
 case "$cmd" in
   pick)
     # An independent coin flip per reviewer. Keep the result for both rounds of a run.
@@ -111,7 +115,7 @@ case "$cmd" in
     echo "tokens_per_kept is raw tokens. Price the two models separately before comparing cost."
     ;;
   *)
-    sed -n '2,13p' "$0" | sed 's/^# \{0,1\}//'
+    sed -n '2,15p' "$0" | sed 's/^# \{0,1\}//'
     [ -z "$cmd" ] || exit 1
     ;;
 esac

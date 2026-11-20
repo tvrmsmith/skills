@@ -1,12 +1,12 @@
 ---
 name: to-spec-to-tickets
-description: "Run to-spec, review the resulting spec with three parallel reviewers, then run to-tickets. Use when the user wants one pass from conversation to published tickets."
+description: "Run to-spec, review the resulting spec with parallel reviewers, then run to-tickets. Use when the user wants one pass from conversation to published tickets."
 disable-model-invocation: true
 ---
 
 # To spec to tickets
 
-One run from conversation to published tickets: `to-spec`, a three-reviewer spec review, `to-tickets`.
+One run from conversation to published tickets: `to-spec`, a parallel-reviewer spec review, `to-tickets`.
 
 An argument naming an existing spec (tracker id or file path) skips step 1 and reviews that spec instead.
 
